@@ -10,15 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170722125658) do
+ActiveRecord::Schema.define(version: 20170722175616) do
 
   create_table "relationships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id"
     t.integer "target_user_id"
-    t.boolean "friends"
-    t.boolean "block"
+    t.boolean "friends", default: false, null: false
+    t.boolean "block", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "subscribe", default: false, null: false
     t.index ["user_id"], name: "index_relationships_on_user_id"
   end
 
