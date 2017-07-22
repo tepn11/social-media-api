@@ -2,6 +2,12 @@
 
 one:
   users: one
+  target_user_id: 1
+  friends: false
+  block: false
 
 two:
   users: two
+  target_user_id: 1
+  friends: false
+  block: false
