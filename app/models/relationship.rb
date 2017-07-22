@@ -8,5 +8,10 @@ class Relationship < ApplicationRecord
   scope :get_friends_emails, lambda { |id|
     select('users.email').joins(:user).where("relationships.user_id = ?", id)
   }
-
+  
+  scope :get_common_friends_emails, lambda { |ids|
+    select('users.email, count(*) cnt').joins(:user).where(user_id: ids).where("users.id NOT IN (?)",ids).
+    group("users.email").
+    having("cnt > 1")
+  }
 end
