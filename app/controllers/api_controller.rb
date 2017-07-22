@@ -1,7 +1,7 @@
 class ApiController < ApplicationController
   def addUser
-    @user = User.new()
     if(params.has_key?(:email))
+      @user = User.new()
       @user.email = params[:email]
       if @user.save!
         json_response({ message: 'User successfully created' }, :created)
@@ -10,7 +10,7 @@ class ApiController < ApplicationController
         json_response({ error: 'Error saving user' }, :unprocessable_entity)
       end
     else
-      json_response({ error: 'Missing friends object'}, :bad_request)
+      json_response({ error: 'Missing email parameter'}, :bad_request)
     end
   end
 
@@ -46,6 +46,13 @@ class ApiController < ApplicationController
   end
 
   def getFriends
+    if(params.has_key?(:email))
+      @user = User.find_by_email! params[:email]
+      @friends = Relationship.get_friends_emails @user.id
+      json_response({ success: true, friends: @friends.map{ |e| e.email }, count: @friends.length }, :ok)
+    else
+      json_response({ error: 'Missing email parameter'}, :bad_request)
+    end
   end
 
   def getCommonFriends
