@@ -15,4 +15,10 @@ class Relationship < ApplicationRecord
     group("users.email").
     having("cnt > 1")
   }
+
+  scope :get_updates_emails, lambda { |id|
+    select('u.email').joins("INNER JOIN users u on u.id = relationships.user_id").
+    where(target_user_id: id).
+    where("u.id NOT IN (select target_user_id from relationships where user_id = ? AND block = true)",id)
+  }
 end

@@ -18,8 +18,8 @@ class ApiController < ApplicationController
     @result = checkTwoEmailsParams params
     if @result[:success]
       if @result[:emails][0] != @result[:emails][1]
-        createFriendsRelationship @result[:emails][0].id, @result[:emails][1].id
-        json_response({ success: true })
+        @res = createFriendsRelationship @result[:emails][0].id, @result[:emails][1].id
+        json_response({ success: @res })
       else
         json_response({ error: "User cannot be friends with himself"}, :bad_request)
       end
@@ -82,17 +82,36 @@ class ApiController < ApplicationController
   end
 
   def getUsersForUpdate
+    if params.has_key?(:sender) && params.has_key?(:text)
+      sender = User.find_by_email! params[:sender]
+      emails = Relationship.get_updates_emails sender.id
+      emails = emails.map{ |e| e.email }
+
+      mentionIds = params[:text].scan(/@\S+/)
+      mentionIds.each do |m_email|
+        mention = User.find_by_email m_email.gsub(/^@/,'')
+        emails << mention.email if mention
+      end
+      json_response({ success: true, recipients: emails.uniq }, :ok)
+    else
+      json_response({ error: "Missing sender or text"}, :bad_request)
+    end
   end
 
   def createFriendsRelationship user1, user2
     rel1 = Relationship.find_or_create_by!(user_id: user1, target_user_id: user2)
-    rel1.friends = true;
-    rel1.subscribe = true;
-    rel1.save!
     rel2 = Relationship.find_or_create_by!(user_id: user2, target_user_id: user1)
-    rel2.friends = true;
-    rel2.subscribe = true;
-    rel2.save!
+    unless rel1.block || rel2.block
+      rel1.friends = true;
+      rel1.subscribe = true;
+      rel1.save!
+      rel2.friends = true;
+      rel2.subscribe = true;
+      rel2.save!
+      true
+    else
+      false
+    end
   end
 
   def createSubscribeRelationship user1, user2
