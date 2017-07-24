@@ -1,5 +1,35 @@
 # API Documentation
 
+**Description**
+----
+This API is for a simple friend management application. The features are as follows:
+
+```
+Add User
+Add Friend
+Get Friends
+Get common friends
+Subscribe
+Block
+Get email list for updates
+```
+
+**Technology choices:**
+----
+* **Ruby on Rails**
+  - Very fast prototyping through the use of generators and scaffolds
+  - Easy configuration
+  - Use of Active record
+  - Very fast performance
+* **MySQL**
+  - Better at handling relations and foriegn keys compared to NoSQL
+* **AWS**
+  - Easy to setup
+  - Good delivery pipelines for continuous integration/deployment
+  
+  
+# API Endpoints
+
 **Add User**
 ----
   Add a single user.
