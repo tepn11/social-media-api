@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   post 'api/getCommonFriends'
 
-  post 'api/subsribe'
+  post 'api/subscribe'
 
   post 'api/block'
 

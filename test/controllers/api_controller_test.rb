@@ -22,7 +22,7 @@ class ApiControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get subsribe" do
-    post api_subsribe_url
+    post api_subscribe_url
     assert_response :success
   end
 

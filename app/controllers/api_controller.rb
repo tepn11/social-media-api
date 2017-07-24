@@ -53,7 +53,7 @@ class ApiController < ApplicationController
     end
   end
 
-  def subsribe
+  def subscribe
     @result = checkRequestorTargetParams params
     if @result[:success]
       if @result[:requestorUser] != @result[:targetUser]
